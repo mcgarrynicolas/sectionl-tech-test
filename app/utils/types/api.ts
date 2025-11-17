@@ -14,14 +14,13 @@ export type Gems = {
 
 
 export type Neighborhood = {
-  name: string,
-  slug: string,
-  city_gems: Gems[]
+  id: number
 }
 
 
 export type Property = {
   name: string,
+  id: number,
   slug: string,
   neighborhoods: Neighborhood[]
 }
