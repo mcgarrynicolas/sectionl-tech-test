@@ -1,5 +1,8 @@
 import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
+import { useEffect, useState } from "react";
+import { getPropertyData } from "~/utils/requests/properties";
+import type { Property } from "~/utils/types/api";
 
 export function meta({}: Route.MetaArgs) {
   return [
