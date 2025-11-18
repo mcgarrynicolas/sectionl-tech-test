@@ -18,8 +18,8 @@ interface filterAction {
 type filterState = {
   activeFilters: string[],
   gems: Gems[],
-  filteredGems: Gems[]
-}
+  filteredGems: Gems[];
+};
 
 function filterReducer(state: filterState, action: filterAction): filterState {
   const { type, payload } = action;
@@ -27,16 +27,16 @@ function filterReducer(state: filterState, action: filterAction): filterState {
     case FilterActionType.Filter:
       let newFilters = [];
       if (state.activeFilters.includes(payload)) {
-        newFilters = state.activeFilters.filter((f) => f !== payload)
+        newFilters = state.activeFilters.filter((f) => f !== payload);
       } else {
-        newFilters = [...state.activeFilters, payload]
+        newFilters = [...state.activeFilters, payload];
       }
 
       let filteredGems = state.gems;
       if (newFilters.length) {
         filteredGems = state.gems.filter((gem) => {
-          return gem.tags.some(tag => newFilters.includes(tag.name))
-        })
+          return gem.tags.some(tag => newFilters.includes(tag.name));
+        });
       }
 
       return {

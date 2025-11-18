@@ -2,7 +2,7 @@ import axios from "axios";
 import type { StrapiResponse, Gems } from "../types/api";
 import qs from "qs";
 
-const API_URL = `https://content.section-l.co/api/city-gems`;
+const API_URL = `/api/city-gems`;
 type ApiPaginationOptions = {
   pageSize: number,
   page: number,

@@ -1,12 +1,10 @@
 import axios from "axios";
 import type { StrapiResponse, Property } from "../types/api";
 
-const API_URL = `https://content.section-l.co/api/properties?populate=*`;
+const API_URL = `/api/properties?populate=*`;
 
 async function getPropertiesFromApi(): Promise<StrapiResponse<Property[]>> {
-  const response = await axios.get(API_URL, {
-    headers: { }
-  });
+  const response = await axios.get(API_URL);
   return response.data;
 }
 
