@@ -13,3 +13,33 @@ body {
     color-scheme: dark;
   }
 }
+
+.sidebar-layout-container {
+    grid-auto-columns: max-content auto;
+    width: 100%;
+    display: grid;
+    position: relative;
+}
+
+.main-content {
+  grid-row-start: 1;
+  grid-column-start: 2;
+  min-width: 0;
+}
+
+.main-content > .selected {
+  background-color: darkgrey;
+}
+
+.sidebar {
+  grid-row-start: 1;
+  grid-column-start: 1;
+  min-width: 0;
+}
+
+.qr-code-bar {
+  grid-row-start: 1;
+  grid-column-start: 3;
+  min-width: 0;
+}
+

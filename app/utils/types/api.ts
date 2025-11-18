@@ -3,13 +3,36 @@ export type Tag = {
   name: string
 }
 
-export type Gems = {
+
+type PhotoFormat = {
+  ext: string,
+  url: string,
+  name: string,
+  size: number,
+  width: number,
+  height: number
+}
+export interface Gems {
   name: string,
   slug: string,
   shortDescription: string,
   longDescription: string,
   googleMapsUrl: string,
-  tags: Tag[]
+  coverImage: {
+    name: string,
+    url: string,
+    alternativeText?: string,
+    width: number,
+    height: number, 
+    formats?: {
+      large: PhotoFormat,
+      small: PhotoFormat,
+      medium: PhotoFormat,
+      thumbnail: PhotoFormat
+    }
+  }
+  tags: Tag[],
+  category: string
 }
 
 

@@ -23,6 +23,25 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export function hydrateFallback() {
+    return (
+      <div className="sidebar-layout-container">
+        <div className="sidebar">
+          <ul className="menu bg-base-200 min-h-full p-4">
+          </ul>
+        </div>
+        <div className="main-content">
+          <ul className="menu bg-base-200 min-h-full p-4">
+          </ul>
+        </div>
+        <div className="qr-code-bar">
+          <ul className="menu bg-base-200 min-h-full p-4">
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
