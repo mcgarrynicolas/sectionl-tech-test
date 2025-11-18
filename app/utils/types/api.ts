@@ -1,7 +1,7 @@
 export type Tag = {
   id: number,
-  name: string
-}
+  name: string;
+};
 
 
 type PhotoFormat = {
@@ -10,8 +10,8 @@ type PhotoFormat = {
   name: string,
   size: number,
   width: number,
-  height: number
-}
+  height: number;
+};
 export interface Gems {
   name: string,
   slug: string,
@@ -23,30 +23,30 @@ export interface Gems {
     url: string,
     alternativeText?: string,
     width: number,
-    height: number, 
+    height: number,
     formats?: {
       large: PhotoFormat,
       small: PhotoFormat,
       medium: PhotoFormat,
-      thumbnail: PhotoFormat
-    }
-  }
+      thumbnail: PhotoFormat;
+    };
+  };
   tags: Tag[],
-  category: string
+  category: string;
 }
 
 
 export type Neighborhood = {
-  id: number
-}
+  id: number;
+};
 
 
 export type Property = {
   name: string,
   id: number,
   slug: string,
-  neighborhoods: Neighborhood[]
-}
+  neighborhoods: Neighborhood[];
+};
 
 export interface StrapiResponse<T> {
   data: T,
@@ -55,7 +55,7 @@ export interface StrapiResponse<T> {
       page: number,
       pageSize: number,
       pageCount: number,
-      total: number
-    }
-  }
+      total: number;
+    };
+  };
 }

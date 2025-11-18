@@ -3,11 +3,11 @@ import classNames from "classnames";
 
 type GemCardProps = Gems & {
   selected?: boolean,
-  action?: () => void
-}
+  action?: () => void;
+};
 export default function GemCard({ name, longDescription, category, tags, action, coverImage, selected }: GemCardProps) {
-  const cardImgSrc = coverImage?.formats?.thumbnail?.url
-  const cardImgAltTxt = coverImage?.alternativeText
+  const cardImgSrc = coverImage?.formats?.thumbnail?.url;
+  const cardImgAltTxt = coverImage?.alternativeText;
 
   return (<div className={classNames("max-w-sm rounded overflow-hidden shadow-lg m-4 cursor-pointer", selected ? "bg-amber-200" : "")} onClick={action}>
     <img src={cardImgSrc} alt={cardImgAltTxt || `thumbnail image for ${name}`} />

@@ -15,10 +15,10 @@ body {
 }
 
 .sidebar-layout-container {
-    grid-auto-columns: max-content auto;
-    width: 100%;
-    display: grid;
-    position: relative;
+  grid-auto-columns: max-content auto;
+  width: 100%;
+  display: grid;
+  position: relative;
 }
 
 .main-content {
@@ -27,7 +27,7 @@ body {
   min-width: 0;
 }
 
-.main-content > .selected {
+.main-content>.selected {
   background-color: darkgrey;
 }
 
@@ -42,4 +42,3 @@ body {
   grid-column-start: 3;
   min-width: 0;
 }
-
