@@ -5,6 +5,7 @@ import GemCard from "./components/GemCard";
 import { useReducer } from "react";
 import qs from "qs";
 import type { Gems } from "~/utils/types/api";
+import classNames from "classnames";
 
 export enum FilterActionType {
   Filter = "filter", Reset = "reset"
@@ -50,6 +51,30 @@ function filterReducer(state: filterState, action: filterAction): filterState {
   }
 }
 
+enum SelectActionType {
+  Select = "select", Reset = "reset"
+}
+
+interface selectAction {
+  type: SelectActionType,
+  payload: string
+}
+
+function selectReducer(state: string[], action: selectAction): string[] {
+  const { type, payload } = action;
+  switch (type) {
+    case SelectActionType.Select:
+      if (state.includes(payload)) {
+        return state.filter(s => s !== payload)
+      } 
+      return [...state, payload]
+    case SelectActionType.Reset:
+      return [];
+    default: return state;
+  }
+  return state;
+}
+
 export default function HiddenGems() {
   const [searchParams, _] = useSearchParams();
   const { gems } = useGems();
@@ -74,37 +99,55 @@ export default function HiddenGems() {
   const filterables = tagsList && categoriesList && [...tagsList, ...categoriesList];
 
   const [filterState, filterDispatch] = useReducer(filterReducer, { activeFilters: [], gems: gems || [], filteredGems: gems || [] });
-  const isGemDefaultSelected = (gem: Gems) => {
-    const currSelected = searchParams.get("selected");
-    if (currSelected?.includes(gem.slug)) {
-      return true;
-    }
-    return false;
-  };
+  const isFilterSelected = (filter: string) => filterState.activeFilters.includes(filter);
+
+  const getInitialSelected = () => {
+    const searchSelected = searchParams.get("selected")
+    const selectedSlugs = searchSelected
+            ?.slice(1, -1) // eliminate outer brackets
+            .split(',') // separate by commas
+            .map(slug => slug.trim()) // eliminate whitespace
+    return selectedSlugs || []
+  }
+
+  const [selectedState, selectedDispatch] = useReducer(selectReducer, getInitialSelected())
+
 
 
   return <>
     <div className="main-content p-4 py-4">
       <div className="p-4 py-4">
         <div className="grid grid-cols-3">
-          {filterState.filteredGems.map((gem) => <GemCard key={gem.slug} {...gem} selected={isGemDefaultSelected(gem)} />)}
+          {filterState.filteredGems.map((gem) => <GemCard key={gem.slug} {...gem} selected={selectedState.includes(gem.slug)} action={() => selectedDispatch({type: SelectActionType.Select, payload: gem.slug})}/>)}
         </div>
       </div>
     </div>
     <div className="qr-code-bar">
       <div className="qr-code">QR Code Here</div>
       <div className="grid grid-cols-1">
+      <button className="bg-gray-600 text-white font-bold mb-2 text-m cursor-pointer rounded-2xl" onClick={() => selectedDispatch({ type: SelectActionType.Reset, payload: "" })}>
+          Reset Selection
+      </button>
         {
           filterables &&
           filterables.map(
             filterable =>
               <button
-                className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                key={`filter__${filterable}`}
+                className={
+                  classNames(
+                    "bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer", 
+                    isFilterSelected(filterable) && "selected bg-amber-400!", 
+                    `aria-selected: ${isFilterSelected(filterable)}`
+                  )}
                 onClick={() => filterDispatch({ type: FilterActionType.Filter, payload: filterable })}>
                 {filterable}
               </button>
           )
         }
+        <button className="bg-gray-600 text-white font-bold text-m cursor-pointer rounded-2xl" onClick={() => filterDispatch({ type: FilterActionType.Reset, payload: "" })}>
+          Reset Filters
+        </button>
       </div>
     </div>
   </>;

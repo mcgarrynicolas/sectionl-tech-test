@@ -2,13 +2,14 @@ import type { Gems } from "~/utils/types/api";
 import classNames from "classnames";
 
 type GemCardProps = Gems & {
-  selected?: boolean
+  selected?: boolean,
+  action?: () => void
 }
-export default function GemCard({ name, longDescription, category, tags, googleMapsUrl, coverImage, selected }: GemCardProps) {
+export default function GemCard({ name, longDescription, category, tags, action, coverImage, selected }: GemCardProps) {
   const cardImgSrc = coverImage?.formats?.thumbnail?.url
   const cardImgAltTxt = coverImage?.alternativeText
 
-  return (<div className={classNames("max-w-sm rounded overflow-hidden shadow-lg m-4", selected ? "bg-amber-200" : "")}>
+  return (<div className={classNames("max-w-sm rounded overflow-hidden shadow-lg m-4 cursor-pointer", selected ? "bg-amber-200" : "")} onClick={action}>
     <img src={cardImgSrc} alt={cardImgAltTxt || `thumbnail image for ${name}`} />
     <div className="p-4 py-4">
       <div className="font-bold mb-2">{name}</div>

@@ -1,5 +1,4 @@
 import type { Config } from "@react-router/dev/config";
-import { getPropertyData } from "./app/utils/requests/properties";
 
 export default {
   // Config options...
