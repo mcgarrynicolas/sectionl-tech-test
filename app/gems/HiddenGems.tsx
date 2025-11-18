@@ -1,11 +1,12 @@
 import type { Route } from "./+types/HiddenGems";
-import { useSearchParams } from "react-router";
+import { useLocation, useSearchParams } from "react-router";
 import { useGems } from "~/layouts/PropertySidebarLayout";
 import GemCard from "./components/GemCard";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import qs from "qs";
 import type { Gems } from "~/utils/types/api";
 import classNames from "classnames";
+import { QRCodeSVG } from "qrcode.react";
 
 export enum FilterActionType {
   Filter = "filter", Reset = "reset"
@@ -57,7 +58,7 @@ enum SelectActionType {
 
 interface selectAction {
   type: SelectActionType,
-  payload: string
+  payload: string;
 }
 
 function selectReducer(state: string[], action: selectAction): string[] {
@@ -65,18 +66,18 @@ function selectReducer(state: string[], action: selectAction): string[] {
   switch (type) {
     case SelectActionType.Select:
       if (state.includes(payload)) {
-        return state.filter(s => s !== payload)
-      } 
-      return [...state, payload]
+        return state.filter(s => s !== payload);
+      }
+      return [...state, payload];
     case SelectActionType.Reset:
       return [];
     default: return state;
   }
-  return state;
 }
 
 export default function HiddenGems() {
   const [searchParams, _] = useSearchParams();
+  const location = useLocation();
   const { gems } = useGems();
   const tagsList = gems && gems.reduce((prev, curr) => {
     const { tags } = curr;
@@ -102,32 +103,45 @@ export default function HiddenGems() {
   const isFilterSelected = (filter: string) => filterState.activeFilters.includes(filter);
 
   const getInitialSelected = () => {
-    const searchSelected = searchParams.get("selected")
+    const searchSelected = searchParams.get("selected");
     const selectedSlugs = searchSelected
-            ?.slice(1, -1) // eliminate outer brackets
-            .split(',') // separate by commas
-            .map(slug => slug.trim()) // eliminate whitespace
-    return selectedSlugs || []
-  }
+      ?.split(',') // separate by commas
+      .map(slug => slug.trim()); // eliminate whitespace
+    return selectedSlugs || [];
+  };
 
-  const [selectedState, selectedDispatch] = useReducer(selectReducer, getInitialSelected())
+  const [selectedState, selectedDispatch] = useReducer(selectReducer, getInitialSelected());
+  const encodeSelection = () => {
+    return `?selected=${encodeURIComponent(selectedState.join(','))}`;
+  };
 
+  const currentUrl = `${window.location.protocol}//${window.location.host}${location.pathname}`;
+
+  console.log(`${currentUrl}${encodeSelection()}`);
 
 
   return <>
     <div className="main-content p-4 py-4">
       <div className="p-4 py-4">
         <div className="grid grid-cols-3">
-          {filterState.filteredGems.map((gem) => <GemCard key={gem.slug} {...gem} selected={selectedState.includes(gem.slug)} action={() => selectedDispatch({type: SelectActionType.Select, payload: gem.slug})}/>)}
+          {filterState.filteredGems.map((gem) => <GemCard key={gem.slug} {...gem} selected={selectedState.includes(gem.slug)} action={() => selectedDispatch({ type: SelectActionType.Select, payload: gem.slug })} />)}
         </div>
       </div>
     </div>
     <div className="qr-code-bar">
-      <div className="qr-code">QR Code Here</div>
+      {selectedState.length > 0 && <>
+        <div className="text-bold text-2xl text-center">Save Your Faves</div>
+        <div className="qr-code flex justify-center">
+          <QRCodeSVG value={`${currentUrl}${encodeSelection()}`} />
+        </div>
+        <div className="text-gray-500 text-xs p-0.5">Scan this QR code to pull up this screen just how you left it!</div>
+      </>}
       <div className="grid grid-cols-1">
-      <button className="bg-gray-600 text-white font-bold mb-2 text-m cursor-pointer rounded-2xl" onClick={() => selectedDispatch({ type: SelectActionType.Reset, payload: "" })}>
-          Reset Selection
-      </button>
+        {selectedState.length > 0 &&
+          <button className="bg-gray-600 text-white font-bold mb-2 text-m cursor-pointer rounded-2xl" onClick={() => selectedDispatch({ type: SelectActionType.Reset, payload: "" })}>
+            Reset Selection
+          </button>
+        }
         {
           filterables &&
           filterables.map(
@@ -136,8 +150,8 @@ export default function HiddenGems() {
                 key={`filter__${filterable}`}
                 className={
                   classNames(
-                    "bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer", 
-                    isFilterSelected(filterable) && "selected bg-amber-400!", 
+                    "bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 cursor-pointer",
+                    isFilterSelected(filterable) && "selected bg-amber-400!",
                     `aria-selected: ${isFilterSelected(filterable)}`
                   )}
                 onClick={() => filterDispatch({ type: FilterActionType.Filter, payload: filterable })}>
