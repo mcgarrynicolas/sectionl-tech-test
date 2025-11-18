@@ -6,8 +6,9 @@ import { QRCodeSVG } from "qrcode.react";
 import { useGems } from "~/layouts/PropertySidebarLayout";
 import type { Gems } from "~/utils/types/api";
 import GemCard from "./components/GemCard";
+import { LoadingSkeleton } from "./components/Skeleton";
 
-export enum FilterActionType {
+enum FilterActionType {
   Filter = "filter", Reset = "reset"
 }
 
@@ -74,24 +75,6 @@ function selectReducer(state: string[], action: selectAction): string[] {
   }
 }
 
-export function hydrateFallback() {
-    return (
-      <div className="sidebar-layout-container">
-        <div className="sidebar">
-          <ul className="menu bg-base-200 min-h-full p-4">
-          </ul>
-        </div>
-        <div className="main-content">
-          <ul className="menu bg-base-200 min-h-full p-4">
-          </ul>
-        </div>
-        <div className="qr-code-bar">
-          <ul className="menu bg-base-200 min-h-full p-4">
-          </ul>
-        </div>
-      </div>
-    );
-  }
 
 export default function HiddenGems() {
   const [searchParams, _] = useSearchParams();
@@ -134,9 +117,6 @@ export default function HiddenGems() {
   };
 
   const currentUrl = `${window.location.protocol}//${window.location.host}${location.pathname}`;
-
-  console.log(`${currentUrl}${encodeSelection()}`);
-
 
   return <>
     <div className="main-content p-4 py-4">

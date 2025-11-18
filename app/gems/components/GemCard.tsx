@@ -19,7 +19,7 @@ export default function GemCard({ name, longDescription, category, tags, action,
     </div>
     <div className="px-6 pt-4 pb-2">
       <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category}</span>
-      {tags.map(tag => <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{tag.name}</span>)}
+      {tags.map(tag => <span key={`tag__${tag.id}`} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{tag.name}</span>)}
     </div>
   </div>);
 }

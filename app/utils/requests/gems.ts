@@ -12,7 +12,7 @@ export async function getCityGemsInNeighborhoods(neighborhoods: number[], pagina
   const paginationQueryString = qs.stringify({ pagination: paginationOptions });
   const rqUrl = `${API_URL}?populate=*&${neighborhoodsQueryString}&${paginationQueryString}`;
 
-  const response = await axios.get(rqUrl, { headers: {} });
+  const response = await axios.get(rqUrl, { baseURL: import.meta.env.DEV ? "" : "https://proxy.corsfix.com/?https://content.section-l.co", headers: {} });
   return response.data;
 }
 

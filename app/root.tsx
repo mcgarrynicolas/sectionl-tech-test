@@ -23,7 +23,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-export function hydrateFallback() {
+export function HydrateFallback() {
     return (
       <div className="sidebar-layout-container">
         <div className="sidebar">
