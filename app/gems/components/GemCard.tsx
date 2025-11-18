@@ -6,9 +6,10 @@ type GemCardProps = Gems & {
 }
 export default function GemCard({ name, longDescription, category, tags, googleMapsUrl, coverImage, selected }: GemCardProps) {
   const cardImgSrc = coverImage?.formats?.thumbnail?.url
+  const cardImgAltTxt = coverImage?.alternativeText
 
   return (<div className={classNames("max-w-sm rounded overflow-hidden shadow-lg m-4", selected ? "bg-amber-200" : "")}>
-    <img src={cardImgSrc} alt="Sunset in the mountains" />
+    <img src={cardImgSrc} alt={cardImgAltTxt || `thumbnail image for ${name}`} />
     <div className="p-4 py-4">
       <div className="font-bold mb-2">{name}</div>
       <p className="text-gray-700 text-base">
